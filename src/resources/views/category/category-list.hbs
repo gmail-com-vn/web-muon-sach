@@ -1,0 +1,97 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý danh mục sách</li>
+        </ol>
+    </div>
+    <div class="body-page">
+        <div class="div-trash flex">
+            <div class="col-lg-6">
+            </div>
+            <div class="col-lg-6">
+                <a class="add-prod item-center" href="/admin/category/create"><span class="oi oi-plus"></span>Tạo
+                    danh
+                    mục</a>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Tên loại danh mục
+                    </th>
+                    <th scope="col">
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #c0c9d2;">
+                {{#each categories}}
+                <tr>
+                    <td>{{this.categoryBook}}</td>
+                    <td>
+                        <a href="/admin/category/{{this._id}}/edit" class="btn btn-success"
+                            style="margin-right: 5px;">Sửa</a>
+                        <a href="" class="btn btn-remove" data-toggle="modal" data-id="{{this._id}}"
+                            data-target="#delete-category-modal">Xóa</a>
+                    </td>
+                </tr>
+
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Bạn chưa có danh mục sản phẩm nào.
+                        <a style="color: rgb(14, 141, 67);" href="/admin/category/create">Tạo danh mục</a>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+
+        {{!-- confirm delete category --}}
+        <div id="delete-category-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Xóa sản phẩm?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạc chắc chắn muốn xóa sản phẩm này</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-delete-category" type="button" class="btn btn-danger">Xóa bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- Delete hidden form --}}
+<form name="delete-category-form" method="POST"></form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var categoryId;
+        var deleteForm = document.forms['delete-category-form']
+        var btnDeletecategory = document.getElementById('btn-delete-category')
+
+        // When dialog confirm clicked
+        $('#delete-category-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            categoryId = button.data('id')
+        })
+
+        btnDeletecategory.onclick = function () {
+            deleteForm.action = '/admin/category/' + categoryId + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+
+</script>

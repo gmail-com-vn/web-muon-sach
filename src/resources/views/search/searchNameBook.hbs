@@ -1,0 +1,173 @@
+<div class="body">
+    <div class="body-page" style="">
+        <div class="row item-center mb-35">
+            <div class="col-lg-2">
+                <h5 style="margin-bottom: 10px;">Kết quả tìm kiếm</h5>
+                <div style="border: 1px solid #ccc;"></div>
+            </div>
+            <div class="col-lg-6 search-tabs flex">
+                <a href="/tim-kiem/?keyword={{keyword}}" class="tab-item">Tất cả</a>
+
+                <a href="/tim-kiem/ten-sach?keyword={{keyword}}" class="tab-item active">Tên sách</a>
+
+                <a href="/tim-kiem/tac-gia?keyword={{keyword}}" class="tab-item">Tác giả</a>
+
+                <a href="/tim-kiem/member?keyword={{keyword}}" class="tab-item">Members</a>
+
+                <div class="line"></div>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                {{#unless booksSearchName }}
+                <div class="flex">
+                    <img style="margin: auto;" height="400px" src="/img/search-no-result.png" alt="">
+                </div>
+                {{/unless}}
+                {{#if booksSearchName }}
+                <div class="wrapper-search-result">
+                    <h5 class="pl-15">Tìm kiếm sách theo tên</h5>
+                    <div class="row mb-35">
+                        {{#each booksSearchName}}
+                        <div class="col-sm-6 col-12 col-lg-3 col-md-4 box-book">
+                            <div class="card card-book">
+                                <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}">
+                                    <img class="card-img-top img-book" src="/{{this.img}}" alt="{{this.name}}" />
+                                </a>
+
+                                <div class="book-info">
+                                    <div class="card-title-book">
+                                        <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}"
+                                            title="{{this.name}}" style="font-weight: 500;">
+                                            {{this.name}}
+                                        </a>
+                                    </div>
+                                    <div class="flex item-center">
+                                        <div class="col-lg-5">
+                                            <form action="/sach-yeu-thich" method="POST">
+                                                <button class="btn btn-love" type="submit"
+                                                    title="Thêm vào sách yêu thích">
+                                                    <i class="far fa-heart"></i>
+                                                </button>
+                                                <input type="hidden" name="bookId" value="{{this._id}}" />
+                                            </form>
+                                        </div>
+                                        <div class="div-borrow-book col-lg-7">
+                                            <button class="btn-borrow-book" data-toggle="modal"
+                                                data-target="#book-modal-{{this._id}}">
+                                                <i class="far fa-paper-plane"></i>
+                                                Mượn sách
+                                            </button>
+                                            <div id="book-modal-{{this._id}}" class="modal" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Gửi yêu cầu mượn sách tới
+                                                                <span
+                                                                    style="font-size: 1.25rem; color: #1c9e0b;">{{this.userId.firstname}}
+                                                                    {{this.userId.lastname}}</span>
+                                                            </h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form action="/member/yeu-cau-muon-sach" method="POST">
+                                                            <div class="modal-body">
+                                                                <div class="flex">
+                                                                    <div class="col-lg-4">
+                                                                        <img width="100%" src="/{{this.img}}" alt="" />
+                                                                    </div>
+                                                                    <div class="col-lg-8" style="margin: auto;">
+                                                                        <p>Tên sách:
+                                                                            <span
+                                                                                style="font-size: 17px; font-weight: 500;">{{this.name}}</span>
+                                                                        </p>
+                                                                        <p>Tác giả: {{this.author}}</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="message-text" class="col-form-label">Tin
+                                                                        nhắn:</label>
+                                                                    <textarea class="form-control" name="message"
+                                                                        id="message-text"></textarea>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="recipient-name"
+                                                                        class="col-form-label">Thời
+                                                                        gian
+                                                                        dự
+                                                                        định trả sách (Ngày)</label>
+                                                                    <input type="text" name="thoiGianTra"
+                                                                        class="form-control" id="recipient-name" />
+                                                                </div>
+                                                                <input type="hidden" name="bookId"
+                                                                    value="{{this._id}}" />
+                                                                <input type="hidden" name="chuSachId"
+                                                                    value="{{this.userId._id}}" />
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Hủy</button>
+                                                                <button id="btn-send-request" type="submit"
+                                                                    class="btn btn-success">Gửi Yêu cầu</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+
+                    </div>
+                </div>
+                {{/if}}
+
+            </div>
+        </div>
+
+        <div class="col-lg-3"></div>
+
+    </div>
+</div>
+</div>
+
+
+<script>
+    const $QS = document.querySelector.bind(document);
+    const $$QSA = document.querySelectorAll.bind(document);
+
+    const tabs = $$QSA(".tab-item");
+    const panes = $$QSA(".tab-pane");
+
+    const tabActive = $QS(".tab-item.active");
+    const line = $QS(".search-tabs .line");
+
+    requestIdleCallback(function () {
+        line.style.left = tabActive.offsetLeft + "px";
+        line.style.width = tabActive.offsetWidth + "px";
+    });
+
+    tabs.forEach((tab, index) => {
+        const pane = panes[index];
+
+        tab.onclick = function () {
+            $QS(".tab-item.active").classList.remove("active");
+            $QS(".tab-pane.active").classList.remove("active");
+
+            line.style.left = this.offsetLeft + "px";
+            line.style.width = this.offsetWidth + "px";
+
+            this.classList.add("active");
+            pane.classList.add("active");
+        };
+    });
+</script>

@@ -1,0 +1,17 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa danh mục sách</li>
+        </ol>
+    </div>
+    <div class="body-page">
+        <form method="POST" action="/admin/category/{{category._id}}?_method=PUT">
+            <div class="form-group">
+                <label for="categoryBook" style="margin-top: 35px">Tên thể loại sách</label>
+                <input type="text" class="form-control" id="categoryBook" name="categoryBook" value="{{category.categoryBook}}" required>
+            </div>
+            <button type="submit" class="btn btn-click btn-green">Lưu</button>
+        </form>
+    </div>
+</div>

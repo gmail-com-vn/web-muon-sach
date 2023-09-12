@@ -1,0 +1,800 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý giao dịch</li>
+        </ol>
+    </div>
+    <div class="table-responsive-lg" style="margin: 0 5%;">
+        <div class="flex search-tabs">
+            <div class="tab-item active">Giao dịch cho mượn sách</div>
+            <div class="tab-item">Giao dịch mượn sách</div>
+            <div class="line"></div>
+
+        </div>
+        <div>
+            <div class="tab-pane active">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Mã đơn hàng
+                            </th>
+                            <th scope="col">
+                                Người mượn
+                            </th>
+                            <th scope="col">
+                                Chủ sách
+                            </th>
+                            <th scope="col">Sách</th>
+
+                            <th scope="col">
+                                Thời gian tạo giao dịch
+                                {{{sortable 'createdAt' _sort}}}
+                            </th>
+                            <th scope="col">Trạng thái{{{sortable 'status' _sort}}}</th>
+                            <th scope="col">
+                                Thao tác
+                            </th>
+                            <th scope="col">Cập nhật trạng thái</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each transactionsChuSach}}
+                        <tr>
+                            <th>{{this._id}}</th>
+                            <td>
+                                <div class="flex">
+                                    <img class="avatar" width="50" height="50" src="/{{this.nguoiMuonId.avatar}}" alt=""
+                                        style="float: right;" />
+                                    <div>
+                                        <p class="nowrap font-size14">{{this.nguoiMuonId.firstname}}
+                                            {{this.nguoiMuonId.lastname}}
+                                            {{#if (equalHelper this.nguoiMuonId.trangThaiXacMinh
+                                            'Thành công')}}
+                                            <i class="fas fa-check-circle check-icon"></i>
+                                            {{/if}}
+                                        </p>
+                                        <span style="font-size: 12px;" class="nowrap">
+                                            Mượn sách
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex">
+                                    <img class="avatar" width="50" height="50" src="/{{this.chuSachId.avatar}}" alt=""
+                                        style="float: right;" />
+                                    <div>
+                                        <p class="nowrap font-size14">{{this.chuSachId.firstname}}
+                                            {{this.chuSachId.lastname}}
+                                            {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                            'Thành công')}}
+                                            <i class="fas fa-check-circle check-icon"></i>
+                                            {{/if}}
+                                        </p>
+                                        <span style="font-size: 12px;" class="nowrap">
+                                            Chủ sách
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="flex font-size14">
+
+                                {{!-- <img width="50px" src="/{{this.bookId.img}}" alt="" /> --}}
+
+                                <img width="80px" height="115px"
+                                    src="https://cdn.chanhtuoi.com/uploads/2022/09/ipiccy-img-24.jpg.webp" alt="">
+
+                                <div>
+                                    <p>Tên sách: {{this.bookId.name}}</p>
+                                    <p>Tác giả: {{this.bookId.author}}</p>
+                                </div>
+
+                            </td>
+                            <td>{{formatDateTime this.createdAt}}</td>
+                            <td>
+                                {{this.trangThaiGiaoDich}}
+                            </td>
+                            <td>
+
+                                <a href="" class="btn btn-outline" data-toggle="modal"
+                                    data-target="#transaction-detail-modal-{{this._id}}">Xem chi tiết</a>
+                                <div id="transaction-detail-modal-{{this._id}}" class="modal" tabindex="-1"
+                                    role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Xem chi tiết giao dịch mượn sách
+                                                    <span
+                                                        style="font-size: 1.25rem; color: #1c9e0b;">{{this.bookId.name}}
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Sách cho mượn:</p>
+                                                <div class="flex" style="background-color: #f3f3f3; padding: 15px 0;">
+                                                    <div class="col-lg-3" style="padding-right: 0;">
+                                                        <img width="100%" src="/{{this.bookId.img}}" alt="" />
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <p>Tên sách: {{this.bookId.name}}</p>
+                                                        <p>Tác giả: {{this.bookId.author}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex">
+                                                    <div class="col-lg-6">Thời gian mượn sách:</div>
+                                                    <div class="col-lg-6">{{this.requestId.thoiGianTra}}(ngày)</div>
+                                                </div>
+
+                                                <div class="flex item-center" style="background-color: #f3f3f3;">
+                                                    <div class="flex col-lg-4">
+                                                        <img class="avatar" width="60" height="60"
+                                                            src="/{{this.nguoiMuonId.avatar}}" alt=""
+                                                            style="float: right;" />
+                                                        <div>
+                                                            <p>{{this.nguoiMuonId.firstname}}
+                                                                {{this.nguoiMuonId.lastname}}
+                                                                {{#if (equalHelper this.nguoiMuonId.trangThaiXacMinh
+                                                                'Thành công')}}
+                                                                <i class="fas fa-check-circle check-icon"></i>
+                                                                {{/if}}
+                                                            </p>
+                                                            <span style="font-size: 12px;">
+                                                                Mượn sách
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <img src="/img/bat-tay.png" width="100%" alt="">
+                                                    </div>
+
+                                                    <div class="flex col-lg-4">
+                                                        <img class="avatar" width="60" height="60"
+                                                            src="/{{this.chuSachId.avatar}}" alt=""
+                                                            style="float: right;" />
+                                                        <div>
+                                                            <p>{{this.chuSachId.firstname}}
+                                                                {{this.chuSachId.lastname}}
+                                                                {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                                                'Thành công')}}
+                                                                <i class="fas fa-check-circle check-icon"></i>
+                                                                {{/if}}
+                                                            </p>
+                                                            <span style="font-size: 12px;">
+                                                                Chủ sách
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h5 style="text-align: center;">Điều khoản của chủ sách</h5>
+                                                <div class="col-lg-12">
+                                                    <p>1. Thanh toán số tiền đặt cọc là
+                                                        <span class="bold">{{this.tienCoc}}</span> (VND) và nhận
+                                                        lại tiền khi giao dịch hoàn tất.
+                                                    </p>
+                                                    <p>2. Ghi chú từ chủ sách: {{this.ghiChu}}.</p>
+                                                </div>
+
+                                                <h5 style="text-align: center;">Thông tin nhận sách</h5>
+                                                <div class="flex">
+                                                    <div class="col-lg-6">
+                                                        Tên người nhận sách: {{this.tenNguoiNhan}}
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        Số điện thoại: {{this.phone}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    Địa chỉ: {{this.address}}
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <a href="" class="btn btn-success" data-toggle="modal" data-id="{{this._id}}"
+                                    data-target="#update-status-modal">Cập nhật trạng thái</a>
+
+                            </td>
+                        </tr>
+
+                        {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Bạn chưa có giao dịch nào.
+                            </td>
+                        </tr>
+
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-pane">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                Mã đơn hàng
+                            </th>
+                            <th scope="col">
+                                Người mượn
+                            </th>
+                            <th scope="col">
+                                Chủ sách
+                            </th>
+                            <th scope="col">Sách</th>
+
+                            <th scope="col">
+                                Thời gian tạo giao dịch
+                                {{{sortable 'createdAt' _sort}}}
+                            </th>
+                            <th scope="col">Trạng thái{{{sortable 'status' _sort}}}</th>
+                            <th scope="col">
+                                Thao tác
+                            </th>
+                            <th scope="col">Đánh giá</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {{#each transactionsNguoiMuon}}
+                        <tr>
+                            <th>{{this._id}}</th>
+                            <td>
+                                <div class="flex">
+                                    <img class="avatar" width="50" height="50" src="/{{this.nguoiMuonId.avatar}}" alt=""
+                                        style="float: right;" />
+                                    <div>
+                                        <p class="nowrap font-size14">{{this.nguoiMuonId.firstname}}
+                                            {{this.nguoiMuonId.lastname}}
+                                            {{#if (equalHelper this.nguoiMuonId.trangThaiXacMinh
+                                            'Thành công')}}
+                                            <i class="fas fa-check-circle check-icon"></i>
+                                            {{/if}}
+                                        </p>
+                                        <span style="font-size: 12px;" class="nowrap">
+                                            Mượn sách
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="flex">
+                                    <img class="avatar" width="50" height="50" src="/{{this.chuSachId.avatar}}" alt=""
+                                        style="float: right;" />
+                                    <div>
+                                        <p class="nowrap font-size14">{{this.chuSachId.firstname}}
+                                            {{this.chuSachId.lastname}}
+                                            {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                            'Thành công')}}
+                                            <i class="fas fa-check-circle check-icon"></i>
+                                            {{/if}}
+                                        </p>
+                                        <span style="font-size: 12px;" class="nowrap">
+                                            Chủ sách
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="flex font-size14">
+
+                                {{!-- <img width="50px" src="/{{this.bookId.img}}" alt="" /> --}}
+
+                                <img width="80px" height="115px"
+                                    src="https://cdn.chanhtuoi.com/uploads/2022/09/ipiccy-img-24.jpg.webp" alt="">
+
+                                <div>
+                                    <p>Tên sách: {{this.bookId.name}}</p>
+                                    <p>Tác giả: {{this.bookId.author}}</p>
+                                </div>
+
+                            </td>
+                            <td>{{formatDateTime this.createdAt}}</td>
+                            <td>
+                                {{this.trangThaiGiaoDich}}
+                            </td>
+                            <td>{{#if (equalHelper this.trangThaiGiaoDich 'Chờ xác nhận')}}
+                                <a href="" class="btn btn-outline" data-toggle="modal"
+                                    data-target="#transaction-confirm-modal-{{this._id}}">Xác nhận giao dịch</a>
+                                <div id="transaction-confirm-modal-{{this._id}}" class="modal" tabindex="-1"
+                                    role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Xác nhận giao dịch mượn sách
+                                                    <span
+                                                        style="font-size: 1.25rem; color: #1c9e0b;">{{this.bookId.name}}
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method="POST"
+                                                    action="/member/xac-nhan-giao-dich/{{this._id}}?_method=PUT">
+                                                    <p>Sách cho mượn:</p>
+                                                    <div class="flex"
+                                                        style="background-color: #f3f3f3; padding: 15px 0;">
+                                                        <div class="col-lg-3" style="padding-right: 0;">
+                                                            <img width="100%" src="/{{this.bookId.img}}" alt="" />
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <p>Tên sách: {{this.bookId.name}}</p>
+                                                            <p>Tác giả: {{this.bookId.author}}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex">
+                                                        <div class="col-lg-6">Thời gian mượn sách:</div>
+                                                        <div class="col-lg-6">{{this.requestId.thoiGianTra}}(ngày)</div>
+                                                    </div>
+
+                                                    <div class="flex item-center" style="background-color: #f3f3f3;">
+                                                        <div class="flex col-lg-4">
+                                                            <img class="avatar" width="60" height="60"
+                                                                src="/{{this.nguoiMuonId.avatar}}" alt=""
+                                                                style="float: right;" />
+                                                            <div>
+                                                                <p>{{this.nguoiMuonId.firstname}}
+                                                                    {{this.nguoiMuonId.lastname}}
+                                                                    {{#if (equalHelper this.nguoiMuonId.trangThaiXacMinh
+                                                                    'Thành công')}}
+                                                                    <i class="fas fa-check-circle check-icon"></i>
+                                                                    {{/if}}
+                                                                </p>
+                                                                <span style="font-size: 12px;">
+                                                                    Mượn sách
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <img src="/img/bat-tay.png" width="100%" alt="">
+                                                        </div>
+
+                                                        <div class="flex col-lg-4">
+                                                            <img class="avatar" width="60" height="60"
+                                                                src="/{{this.chuSachId.avatar}}" alt=""
+                                                                style="float: right;" />
+                                                            <div>
+                                                                <p>{{this.chuSachId.firstname}}
+                                                                    {{this.chuSachId.lastname}}
+                                                                    {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                                                    'Thành công')}}
+                                                                    <i class="fas fa-check-circle check-icon"></i>
+                                                                    {{/if}}
+                                                                </p>
+                                                                <span style="font-size: 12px;">
+                                                                    Chủ sách
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <h5 style="text-align: center;">Điều khoản của chủ sách</h5>
+                                                    <div class="col-lg-12">
+                                                        <p>1. Thanh toán số tiền đặt cọc là <span
+                                                                class="bold">{{this.tienCoc}}</span> (VND) và nhận
+                                                            lại tiền
+                                                            khi giao dịch
+                                                            hoàn tất.</p>
+                                                        <p>2. Ghi chú từ chủ sách: {{this.ghiChu}}.</p>
+                                                    </div>
+
+                                                    <h5 style="text-align: center;">Thông tin nhận sách</h5>
+                                                    <div class="flex">
+                                                        <div class="form-group col-lg-6">
+                                                            <label for="tenNguoiNhan" class="col-form-label">Tên người
+                                                                nhận</label>
+                                                            <input type="text" name="tenNguoiNhan" class="form-control"
+                                                                id="tenNguoiNhan" />
+                                                        </div>
+                                                        <div class="form-group col-lg-6">
+                                                            <label for="phone" class="col-form-label">Số điện
+                                                                thoại</label>
+                                                            <input type="text" name="phone" class="form-control"
+                                                                id="phone" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-lg-12">
+                                                        <label for="address" class="col-form-label">Địa chỉ</label>
+                                                        <input type="text" name="address" class="form-control"
+                                                            id="address" />
+                                                    </div>
+                                                    <div class="form-check col-lg-12">
+                                                        <input type="radio" id="input" name="Đồng ý điều khoản"
+                                                            required>
+                                                        <label for="input">Đồng ý tất cả các điều khoản </label>
+                                                    </div>
+
+                                                    <input type="hidden" name="trangThaiGiaoDich" value="Chờ đặt cọc">
+
+                                                    <div class="col-lg-12">
+                                                        <button type="submit" class="btn btn-success col-lg-12"
+                                                            style="border-radius: 15px;">Xác nhận giao dịch</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                <a href="" class="btn btn-outline" data-toggle="modal"
+                                    data-target="#transaction-detail-modal-{{this._id}}">Xem chi tiết</a>
+                                <div id="transaction-detail-modal-{{this._id}}" class="modal" tabindex="-1"
+                                    role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Xem chi tiết giao dịch mượn sách
+                                                    <span
+                                                        style="font-size: 1.25rem; color: #1c9e0b;">{{this.bookId.name}}
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Sách cho mượn:</p>
+                                                <div class="flex" style="background-color: #f3f3f3; padding: 15px 0;">
+                                                    <div class="col-lg-3" style="padding-right: 0;">
+                                                        <img width="100%" src="/{{this.bookId.img}}" alt="" />
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <p>Tên sách: {{this.bookId.name}}</p>
+                                                        <p>Tác giả: {{this.bookId.author}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex">
+                                                    <div class="col-lg-6">Thời gian mượn sách:</div>
+                                                    <div class="col-lg-6">{{this.requestId.thoiGianTra}}(ngày)</div>
+                                                </div>
+
+                                                <div class="flex item-center" style="background-color: #f3f3f3;">
+                                                    <div class="flex col-lg-4">
+                                                        <img class="avatar" width="60" height="60"
+                                                            src="/{{this.nguoiMuonId.avatar}}" alt=""
+                                                            style="float: right;" />
+                                                        <div>
+                                                            <p>{{this.nguoiMuonId.firstname}}
+                                                                {{this.nguoiMuonId.lastname}}
+                                                                {{#if (equalHelper this.nguoiMuonId.trangThaiXacMinh
+                                                                'Thành công')}}
+                                                                <i class="fas fa-check-circle check-icon"></i>
+                                                                {{/if}}
+                                                            </p>
+                                                            <span style="font-size: 12px;">
+                                                                Mượn sách
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <img src="/img/bat-tay.png" width="100%" alt="">
+                                                    </div>
+
+                                                    <div class="flex col-lg-4">
+                                                        <img class="avatar" width="60" height="60"
+                                                            src="/{{this.chuSachId.avatar}}" alt=""
+                                                            style="float: right;" />
+                                                        <div>
+                                                            <p>{{this.chuSachId.firstname}}
+                                                                {{this.chuSachId.lastname}}
+                                                                {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                                                'Thành công')}}
+                                                                <i class="fas fa-check-circle check-icon"></i>
+                                                                {{/if}}
+                                                            </p>
+                                                            <span style="font-size: 12px;">
+                                                                Chủ sách
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h5 style="text-align: center;">Điều khoản của chủ sách</h5>
+                                                <div class="col-lg-12">
+                                                    <p>1. Thanh toán số tiền đặt cọc là
+                                                        <span class="bold">{{this.tienCoc}}</span> (VND) và nhận
+                                                        lại tiền khi giao dịch hoàn tất.
+                                                    </p>
+                                                    <p>2. Ghi chú từ chủ sách: {{this.ghiChu}}.</p>
+                                                </div>
+
+                                                <h5 style="text-align: center;">Thông tin nhận sách</h5>
+                                                <div class="flex">
+                                                    <div class="col-lg-6">
+                                                        Tên người nhận sách: {{this.tenNguoiNhan}}
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        Số điện thoại: {{this.phone}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-12">
+                                                    Địa chỉ: {{this.address}}
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                {{#if (equalHelper this.trangThaiGiaoDich 'Hoàn thành')}}
+                                <a href="" class="btn btn-success" data-toggle="modal" data-id="{{this._id}}"
+                                    data-target="#evaluate-modal-{{this._id}}">Đánh giá</a>
+                                {{/if}}
+
+                                {{#unless (equalHelper this.trangThaiGiaoDich 'Hoàn thành')}}
+                                <a href="" class="btn btn-success button-disabled" data-toggle="modal"
+                                    data-id="{{this._id}}">Đánh
+                                    giá</a>
+                                {{/unless}}
+                                <div id="evaluate-modal-{{this._id}}" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title flex">Đánh giá chủ sách:
+                                                    <div class="flex">
+                                                        <img class="avatar" width="50" height="50"
+                                                            src="/{{this.chuSachId.avatar}}" alt=""
+                                                            style="float: right;" />
+                                                        <div>
+                                                            <p>{{this.chuSachId.firstname}}
+                                                                {{this.chuSachId.lastname}}
+                                                                {{#if (equalHelper this.chuSachId.trangThaiXacMinh
+                                                                'Thành công')}}
+                                                                <i class="fas fa-check-circle check-icon"></i>
+                                                                {{/if}}
+                                                            </p>
+                                                            <span style="font-size: 12px;">
+                                                                Chủ sách
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </h5>
+
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6>Sách đã mượn</h6>
+                                                <div class="flex" style="background-color: #f3f3f3; padding: 15px 0;">
+                                                    <div class="col-lg-3" style="padding-right: 0;">
+                                                        <img width="100%" src="/{{this.bookId.img}}" alt="" />
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <p>Tên sách: {{this.bookId.name}}</p>
+                                                        <p>Tác giả: {{this.bookId.author}}</p>
+                                                    </div>
+                                                </div>
+                                                <h4 class="text-center">Đánh giá</h4>
+                                                <form method="POST" action="/member/danh-gia/{{this.bookId._id}}">
+                                                    <div class="rating"
+                                                        style="font-size: 40px; justify-content: center;">
+                                                        <input type="hidden" class="rating-star" name="star" value="3">
+                                                        <div class="rating-item" data-rate="1"></div>
+                                                        <div class="rating-item" data-rate="2"></div>
+                                                        <div class="rating-item active" data-rate="3"></div>
+                                                        <div class="rating-item" data-rate="4"></div>
+                                                        <div class="rating-item" data-rate="5"></div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="comment">Nhận xét của bạn</label>
+                                                        <textarea class="form-control" id="comment" name="comment"
+                                                            style="height: 200px;" required></textarea>
+                                                    </div>
+
+                                                    <input type="hidden" name="transactionId" value="{{this._id}}">
+                                                    <input type="hidden" name="chuSachId"
+                                                        value="{{this.chuSachId._id}}">
+                                                    <input type="hidden" name="nguoiMuonId"
+                                                        value="{{this.nguoiMuonId._id}}">
+
+                                                    <div class="col-lg-12">
+                                                        <button type="submit" class="btn btn-success col-lg-12"
+                                                            style="border-radius: 15px;">Gửi đánh giá</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {{else}}
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                Bạn chưa có giao dịch nào.
+                            </td>
+                        </tr>
+
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="update-status-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cập nhật trạng thái giao dịch</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="display: flex;">
+                <div class="col-lg-3 div-btn-status">
+                    <button id="btn-van-chuyen" type="button" class="btn btn-primary btn-status">Vận
+                        chuyển</button>
+                </div>
+                <div class="col-lg-3 div-btn-status">
+                    <button id="btn-dang-giao" type="button" class="btn btn-info btn-status">Đang
+                        giao</button>
+                </div>
+                <div class="col-lg-3 div-btn-status">
+                    <button id="btn-hoan-thanh" type="button" class="btn btn-success btn-status">Hoàn
+                        thành</button>
+                </div>
+                <div class="col-lg-3 div-btn-status">
+                    <button id="btn-da-huy" type="button" class="btn btn-danger btn-status">Đã
+                        hủy</button>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form name="van-chuyen-form" method="POST">
+    <input type="hidden" name="trangThaiGiaoDich" value="Vận chuyển">
+</form>
+<form name="dang-giao-form" method="POST">
+    <input type="hidden" name="trangThaiGiaoDich" value="Đang giao">
+</form>
+<form name="hoan-thanh-form" method="POST">
+    <input type="hidden" name="trangThaiGiaoDich" value="Hoàn thành">
+</form>
+<form name="da-huy-form" method="POST">
+    <input type="hidden" name="trangThaiGiaoDich" value="Đã hủy">
+</form>
+
+<script>
+    const container = document.querySelector('.rating');
+    const ratingStar = document.querySelector('.rating-star');
+    const items = container.querySelectorAll('.rating-item')
+    container.onclick = e => {
+        const elClass = e.target.classList;
+        // change the rating if the user clicks on a different star
+        if (!elClass.contains('active')) {
+            items.forEach( // reset the active class on the star
+                item => item.classList.remove('active')
+            );
+            ratingStar.value = e.target.getAttribute("data-rate")
+            console.log(e.target.getAttribute("data-rate"));
+            console.log(ratingStar.value)
+            elClass.add('active'); // add active class to the clicked star
+        }
+    };
+</script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var transactionId;
+        var vanchuyenForm = document.forms['van-chuyen-form']
+        var btnVanchuyen = document.getElementById('btn-van-chuyen')
+
+        var danggiaoForm = document.forms['dang-giao-form']
+        var btnDanggiao = document.getElementById('btn-dang-giao')
+
+        var hoanthanhForm = document.forms['hoan-thanh-form']
+        var btnHoanthanh = document.getElementById('btn-hoan-thanh')
+
+        var dahuyForm = document.forms['da-huy-form']
+        var btnDahuy = document.getElementById('btn-da-huy')
+
+        // When dialog confirm clicked
+        $('#update-status-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            transactionId = button.data('id')
+        })
+
+        btnVanchuyen.onclick = function () {
+            vanchuyenForm.action = '/member/transaction/' + transactionId + '?_method=PUT'
+            vanchuyenForm.submit()
+        }
+
+        btnDanggiao.onclick = function () {
+            danggiaoForm.action = '/member/transaction/' + transactionId + '?_method=PUT'
+            danggiaoForm.submit()
+        }
+
+        btnHoanthanh.onclick = function () {
+            hoanthanhForm.action = '/member/transaction/' + transactionId + '?_method=PUT'
+            hoanthanhForm.submit()
+        }
+
+        btnDahuy.onclick = function () {
+            dahuyForm.action = '/member/transaction/' + transactionId + '?_method=PUT'
+            dahuyForm.submit()
+        }
+    })
+</script>
+
+<script>
+    const $QS = document.querySelector.bind(document);
+    const $$QSA = document.querySelectorAll.bind(document);
+
+    const tabs = $$QSA(".tab-item");
+    const panes = $$QSA(".tab-pane");
+
+    const tabActive = $QS(".tab-item.active");
+    const line = $QS(".search-tabs .line");
+
+    requestIdleCallback(function () {
+        line.style.left = tabActive.offsetLeft + "px";
+        line.style.width = tabActive.offsetWidth + "px";
+    });
+
+    tabs.forEach((tab, index) => {
+        const pane = panes[index];
+
+        tab.onclick = function () {
+            $QS(".tab-item.active").classList.remove("active");
+            $QS(".tab-pane.active").classList.remove("active");
+
+            line.style.left = this.offsetLeft + "px";
+            line.style.width = this.offsetWidth + "px";
+
+            this.classList.add("active");
+            pane.classList.add("active");
+        };
+    });
+</script>

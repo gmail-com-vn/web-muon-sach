@@ -1,0 +1,152 @@
+<div class="fixed-top">
+    <div class="nav-header item-center">
+        <div class="flex item-center col-lg-4">
+            <div>
+                <a href="/">
+                    <img src="/img/logo-web.png" width="80" height="40" class="d-inline-block align-top" alt="" />
+                </a>
+            </div>
+            <li class="li-home">
+                <a href="/">Trang chủ<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="dropdown li-book">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Thể loại sách
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {{#each category}}
+                    <a class="dropdown-item" href="/book/{{this.slugCategoryBook}}">{{this.categoryBook}}</a>
+                    <div class="dropdown-divider"></div>
+                    {{/each}}
+                </div>
+            </li>
+            <li class="li-review">
+                <a href="/blogs">Góc Review</a>
+            </li>
+        </div>
+        <div class="div-search col-lg-4">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="/tim-kiem">
+                <div class="flex" style="width: 100%;">
+                    <input class="input-search" name="keyword" type="search" placeholder="Tìm kiếm"
+                        aria-label="Search" />
+                    <button class="btn-search" type="submit"><span class="oi oi-magnifying-glass"></span></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="div-nav-content flex item-center col-lg-4">
+            <div class="div-love">
+                <a class="flex item-center" href="/sach-yeu-thich" title="Sách yêu thích">
+                    <img class="img-love" src="/img/love-image.png" alt="" />
+                    {{#if isAuthenticated}}
+                    <span>({{user.love.items.length}})</span>
+                    {{/if}}
+                </a>
+            </div>
+            {{#if isAuthenticated}}
+            <div>
+                <span class="oi oi-bell"></span>
+            </div>
+            {{/if}}
+            {{#unless isAuthenticated}}
+            <div class="btn-login">
+                <a class="my-2 my-sm-0" href="/dang-nhap">Đăng nhập</a>
+            </div>
+            <div class="btn-signin">
+                <a class="my-2 my-sm-0" href="/dang-ky">Đăng ký</a>
+            </div>
+            {{/unless}}
+
+            {{#if isAuthenticated}}
+            {{#if isAuthenticatedAdmin}}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="/img/manager.jpg" alt="" class="user-avatar" />
+                    {{user.firstname}}
+                    {{user.lastname}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/admin/thong-ke-giao-dich">Thống kê giao dịch</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/admin/category">Quản lý danh mục sách</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/admin/quan-ly-tai-khoan">Quản lý tài khoản</a>
+                    <form action="/dang-xuat" method="POST">
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item btn" type="submit">Đăng xuất</button>
+                    </form>
+                </div>
+            </li>
+            {{/if}}
+
+            {{#unless isAuthenticatedAdmin}}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="/{{user.avatar}}" alt="" class="user-avatar" />
+                    {{user.firstname}}
+                    {{user.lastname}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/ho-so-cua-toi">Hồ sơ của tôi</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/member/stored/book">Quản lý sách</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/member/news">Quản lý bài đăng</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/member/danh-sach-yeu-cau">Danh sách yêu cầu</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="/member/quan-ly-giao-dich">Quản lý giao dịch</a>
+                    <div class="dropdown-divider"></div>
+                    <form action="/dang-xuat" method="POST">
+                        <button class="dropdown-item btn" type="submit">Đăng xuất</button>
+                    </form>
+                </div>
+            </li>
+            {{/unless}}
+            {{/if}}
+        </div>
+    </div>
+    <div style="background-color: #e2e2e2; height:0.5px;">
+    </div>
+
+</div>
+
+{{! <div class="menu">
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/gioi-thieu">Giới thiệu</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                Sản phẩm
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="/danh-muc-san-pham/rau-cu">Rau củ</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/sinh-to">Sinh tố</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/thuc-pham-tuoi-song">Thực phẩm tươi sống</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/hoa-qua">Hoa quả</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/cac-loai-hat">Các loại hạt</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/gia-vi">Gia vị</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/ngu-coc">Ngũ cốc</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="/danh-muc-san-pham/sieu-thuc-pham">Siêu thực phẩm</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/tin-tuc">Tin tức</a>
+        </li>
+    </ul>
+</div> }}

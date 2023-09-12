@@ -1,0 +1,230 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý sách</li>
+        </ol>
+    </div>
+    <div class="body-page">
+        <form name="container-form" method="POST" action="/member/book/handle-form-actions">
+            <div class="div-trash flex">
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-secondary btn-trash" data-toggle="tooltip"
+                        data-placement="right" title="Thùng rác">
+                        <a class="oi oi-trash flex" href="/member/trash/book">
+                            <p>({{deletedCount}})</p>
+                        </a>
+                    </button>
+                </div>
+                <div class="col-lg-6">
+                    <a class="add-prod item-center" href="/member/book/create"><span class="oi oi-plus"></span>Đăng
+                        sách</a>
+                </div>
+            </div>
+
+            <div class="flex item-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+                    <label class="form-check-label" for="checkbox-all">
+                        Chọn tất cả
+                    </label>
+                </div>
+
+                <select class="checkbox-select-all-options" name="action" required>
+                    <option value="">--hành động--</option>
+                    <option value="delete">Xóa</option>
+                </select>
+
+                <button class="btn btn-primary btn-sm check-all-submit-btn" disabled>Thực hiện</button>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">
+                            ID
+                            {{{sortable '_id' _sort}}}
+                        </th>
+                        <th scope="col">
+                            Tên sách
+                            {{{sortable 'name' _sort}}}
+                        </th>
+                        <th scope="col"></th>
+                        <th scope="col">
+                            Loại sách
+                            {{{sortable 'book_type' _sort}}}
+                        </th>
+                        <th scope="col">
+                            Giá
+                            {{{sortable 'price' _sort}}}
+                        </th>
+                        <th scope="col" colspan="">Thời gian tạo{{{sortable 'createdAt' _sort}}}</th>
+                        <th scope="col" style="padding-left: 35px;">Thao tác</th>
+
+                    </tr>
+                </thead>
+                <tbody style="border-bottom: 1px solid #c0c9d2;">
+                    {{#each books}}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="bookIds[]" value="{{this._id}}">
+                            </div>
+                        </td>
+                        <th scope="row">{{this._id}}</th>
+                        <td>{{this.name}}</td>
+                        <td>
+                            <img class="card-img-top" src="/{{this.img}}" alt="{{this.name}}"
+                                style="width: 150px; height: 150px;">
+                        </td>
+                        <td>{{this.book_type}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{formatDateTime this.createdAt}}</td>
+                        <td>
+                            <a href="/member/book/{{this._id}}/edit" class="btn btn-success"
+                                style="margin-right: 5px;">Sửa</a>
+                            <a href="" class="btn btn-remove" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#delete-book-modal">Xóa</a>
+                        </td>
+                    </tr>
+
+                    {{else}}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Bạn chưa đăng sách nào.
+                            <a style="color: rgb(14, 141, 67);" href="/member/book/create">Đăng sách</a>
+                        </td>
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </form>
+
+
+        {{!-- confirm delete book --}}
+        <div id="delete-book-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Xóa sách?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạc chắc chắn muốn xóa sách này</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-delete-book" type="button" class="btn btn-danger">Xóa bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-label="Page navigation example" style="margin: 30px 20% 0 20%;">
+        <ul class="pagination">
+            <li class="page-item">
+                {{#if hasPreviousPage}}
+                <a class="page-link" href="/member/stored/book/?page={{previousPage}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                {{/if}}
+            </li>
+
+            {{#unless (isEqualTo currentPage 1) }}
+            {{#unless (isEqualTo previousPage 1) }}
+            <li class="page-item"><a class="page-link" href="/member/stored/book/?page=1">1</a></li>
+            {{/unless}}
+            {{/unless}}
+
+            {{#if hasPreviousPage}}
+            <li class="page-item"><a class="page-link"
+                    href="/member/stored/book/?page={{previousPage}}">{{previousPage}}</a>
+            </li>
+            {{/if}}
+
+            <li class="page-item"><a class="page-link"
+                    href="/member/stored/book/?page={{currentPage}}">{{currentPage}}</a></li>
+
+            {{#if hasNextPage}}
+            <li class="page-item"><a class="page-link" href="/member/stored/book/?page={{nextPage}}">{{nextPage}}</a>
+            </li>
+            {{/if}}
+
+            {{#unless (isEqualTo lastPage currentPage) }}
+            {{#unless (isEqualTo nextPage lastPage) }}
+            <li class="page-item"><a class="page-link" href="/member/stored/book/?page={{lastPage}}">{{lastPage}}</a>
+            </li>
+            {{/unless}}
+            {{/unless}}
+
+            <li class="page-item">
+                {{#if hasNextPage}}
+                <a class="page-link" href="/member/stored/book/?page={{nextPage}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+                {{/if}}
+            </li>
+        </ul>
+    </div>
+</div>
+
+{{!-- Delete hidden form --}}
+<form name="delete-book-form" method="POST"></form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var bookId;
+        var deleteForm = document.forms['delete-book-form']
+        //var containerForm = document.forms['container-form']
+        var btnDeletebook = document.getElementById('btn-delete-book')
+        var checkboxAll = $('#checkbox-all')
+        var bookItemCheckbox = $('input[name="bookIds[]"]')
+        var checkAllSubmitBtn = $('.check-all-submit-btn')
+
+        // When dialog confirm clicked
+        $('#delete-book-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            bookId = button.data('id')
+        })
+
+        btnDeletebook.onclick = function () {
+            deleteForm.action = '/member/book/' + bookId + '?_method=DELETE'
+            deleteForm.submit()
+        }
+
+        //checkbox all changed
+        checkboxAll.change(function () {
+            var isCheckedAll = $(this).prop('checked')
+            bookItemCheckbox.prop('checked', isCheckedAll)
+            renderCheckAllSubmitBtn()
+        })
+
+        // book item checkbox changed
+        bookItemCheckbox.change(function () {
+            var isCheckedAll = bookItemCheckbox.length === $('input[name="bookIds[]"]:checked').length
+            checkboxAll.prop('checked', isCheckedAll)
+            renderCheckAllSubmitBtn()
+        })
+
+
+
+        //Re-render check all submit button
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="bookIds[]"]:checked').length
+            if (checkedCount > 0) {
+                checkAllSubmitBtn.attr('disabled', false)
+            } else {
+                checkAllSubmitBtn.attr('disabled', true)
+            }
+        }
+    })
+
+</script>

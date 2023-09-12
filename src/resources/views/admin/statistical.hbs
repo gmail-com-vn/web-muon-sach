@@ -1,0 +1,74 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thống kê</li>
+        </ol>
+    </div>
+
+    <div class="body-page row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <div class="div-chart">
+                <h3>Biểu đồ số giao dịch theo từng tháng</h3>
+                <canvas id="ordersChart"></canvas>
+            </div>
+            <div class="div-chart">
+                <h3>Biểu đồ sách mượn nhiều</h3>
+                <canvas id="productsChart"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+
+    <script>
+        // Lấy dữ liệu giao dịch và giao dịch từ biến ordersData và productsData được truyền từ server
+        var totalDonHang = {{{ totalGiaoDich }}};
+        var productsData = {{{ booksData }}};
+
+        // Vẽ biểu đồ giao dịch
+        var ordersChart = new Chart(document.getElementById('ordersChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+                datasets: [{
+                    label: 'Số giao dịch',
+                    data: totalDonHang,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Vẽ biểu đồ số giao dịch
+        var productsChart = new Chart(document.getElementById('productsChart'), {
+            type: 'bar',
+            data: {
+                labels: productsData.map(p => p.name),
+                datasets: [{
+                    label: 'Số lượng',
+                    data: productsData.map(p => p.totalSold),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>

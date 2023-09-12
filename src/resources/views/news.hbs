@@ -1,0 +1,79 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Góc review</li>
+        </ol>
+    </div>
+
+    <div class="body-page">
+        <div class="row" style="">
+            {{#each stories}}
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-sm-12 col-lg-6 div-news">
+                <div class="flex item-center margin-news" style="margin-bottom: 7px;">
+                    <img class="user-avatar" src="/{{this.userId.avatar}}" alt="">
+                    <div class="div-inf-user">
+                        <div class="name-user">
+                            {{this.userId.firstname}} {{this.userId.lastname}}
+                            {{#if (equalHelper this.userId.trangThaiXacMinh 'Thành công')}}
+                            <i class="fas fa-check-circle check-icon"></i>
+                            {{/if}}
+                        </div>
+                        <div class="time-create">
+                            {{timeAgo this.createdAt}}
+                        </div>
+                    </div>
+                </div>
+                <div class="content-news margin-news">
+                    {{{this.content}}}
+                </div>
+                <div>
+                    <div class="card">
+                        {{!-- <a href="/tin-tuc/{{this.slug}}">
+                        </a> --}}
+                        <img class="" src="/{{this.imgStory}}" alt="" style="height: 534px">
+                    </div>
+                </div>
+                <div class="div-comment margin-news">
+                    <div class="div-number flex">
+                        <div class="number-love col-lg-6 flex item-center">
+                            <i class="fas fa-heart"></i>
+                            <p>{{this.like}}</p>
+                        </div>
+                        <div class="number-comment col-lg-6 flex item-center">
+                            <p>0 Bình luận</p>
+                        </div>
+                    </div>
+                    <div class="div-action flex">
+                        <button type="submit" id="btn-action-love{{this._id}}"
+                            class="action-love col-lg-6 flex item-center"
+                            onclick="document.getElementById('btn-action-love{{this._id}}').style.color='red'"
+                            data-id="{{this._id}}">
+                            <i class="far fa-heart"></i>
+                            <p>Yêu thích</p>
+                        </button>
+                        <button class="action-comment col-lg-6 flex item-center">
+                            <i class="far fa-comment-alt"></i>
+                            <p>Bình luận</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+</div>
+<script>
+
+
+
+</script>
+
+<form name="love-form" method="POST" hidden></form>

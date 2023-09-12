@@ -1,0 +1,272 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{user.firstname}}{{user.lastname}}{{user._id}}</li>
+        </ol>
+    </div>
+
+    <div class="body-page">
+        <div class="info-member flex">
+            <img class="avatar" src="/{{user.avatar}}" alt="" width="170" height="170" />
+            <div class="m-left-50">
+                <div class="flex mb-30">
+                    <p class="info-item">Tên thành viên</p>
+                    <span>{{user.firstname}} {{user.lastname}}
+                        {{#if (equalHelper user.trangThaiXacMinh 'Thành công')}}
+                        <i class="fas fa-check-circle check-icon"></i>
+                        {{/if}}
+                    </span>
+                </div>
+                <div class="flex mb-30">
+                    <p class="info-item">Đánh giá</p>
+                </div>
+                <div class="flex mb-30">
+                    <p class="info-item">Lịch sử</p>
+                </div>
+                <div class="flex mb-30">
+                    <p class="info-item">Huy Hiệu</p>
+                    <div class="flex" style="justify-content: space-between; width: 368px;">
+                        <div>
+                            <div class="item-armorial">
+                                <img src="/img/year.png" alt="" />
+                            </div>
+                            <p class="w-56">Thành viên từ</p>
+                        </div>
+                        <div>
+                            <div class="item-armorial">
+                                <img src="/img/chat.png" alt="" />
+                            </div>
+                            <p class="w-56">Phản hồi nhanh</p>
+                        </div>
+                        <div>
+                            <div class="item-armorial">
+                                <img src="/img/giaoHang.png" alt="" />
+                            </div>
+                            <p class="w-56">Giao sách nhanh</p>
+                        </div>
+                        {{#if (equalHelper user.trangThaiXacMinh 'Thành công')}}
+                        <div>
+                            <div class="item-armorial">
+                                <img src="/img/baoMat.png" alt="" />
+                            </div>
+                            <p class="w-56">Đáng tin cậy</p>
+                        </div>
+                        {{/if}}
+
+                        {{#unless (equalHelper user.trangThaiXacMinh 'Thành công')}}\
+                        <div></div>
+                        {{/unless}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mt-50 mb-30">Sách đã đăng</h3>
+        <div class="row">
+            {{#each books}}
+            <div class="col-sm-4 col-6 col-lg-2 col-md-3 box-book">
+                <div class="card card-book">
+                    <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}">
+                        <img class="card-img-top img-book" src="/{{this.img}}" alt="{{this.name}}" />
+                    </a>
+
+                    <div class="book-info">
+                        <div class="card-title-book">
+                            <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}" title="{{this.name}}"
+                                style="font-weight: 500;">
+                                {{this.name}}
+                            </a>
+                        </div>
+                        <div class="flex item-center">
+                            <div class="col-lg-5">
+                                <form action="/sach-yeu-thich" method="POST">
+                                    <button class="btn btn-love" type="submit" title="Thêm vào sách yêu thích">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <input type="hidden" name="bookId" value="{{this._id}}" />
+                                </form>
+                            </div>
+                            <div class="div-borrow-book col-lg-7">
+                                <button class="btn-borrow-book" data-toggle="modal"
+                                    data-target="#book-modal-{{this._id}}">
+                                    <i class="far fa-paper-plane"></i>
+                                    Mượn sách
+                                </button>
+                                <div id="book-modal-{{this._id}}" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Gửi yêu cầu mượn sách tới
+                                                    <span
+                                                        style="font-size: 1.25rem; color: #1c9e0b;">{{this.userId.firstname}}
+                                                        {{this.userId.lastname}}</span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="/member/yeu-cau-muon-sach" method="POST">
+                                                <div class="modal-body">
+                                                    <div class="flex">
+                                                        <div class="col-lg-4">
+                                                            <img width="100%" src="/{{this.img}}" alt="" />
+                                                        </div>
+                                                        <div class="col-lg-8" style="margin: auto;">
+                                                            <p>Tên sách:
+                                                                <span
+                                                                    style="font-size: 17px; font-weight: 500;">{{this.name}}</span>
+                                                            </p>
+                                                            <p>Tác giả: {{this.author}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="col-form-label">Tin
+                                                            nhắn:</label>
+                                                        <textarea class="form-control" name="message"
+                                                            id="message-text"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-form-label">Thời gian dự
+                                                            định trả sách (Ngày)</label>
+                                                        <input type="text" name="thoiGianTra" class="form-control"
+                                                            id="recipient-name" />
+                                                    </div>
+                                                    <input type="hidden" name="bookId" value="{{this._id}}" />
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Hủy</button>
+                                                    <button id="btn-send-request" type="submit"
+                                                        class="btn btn-success">Gửi Yêu cầu</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <h3 class="mt-50 mb-30">Tất cả đánh giá</h3>
+
+        <div class="div-evaluate">
+            <div class="flex div-header-evaluate">
+                {{#if ratings}}
+                <div>
+                    <i class="fas fa-star star font-size25"></i>
+                    <i class="fas fa-star star font-size25"></i>
+                    <i class="fas fa-star star font-size25"></i>
+                    <i class="fas fa-star star font-size25"></i>
+                    <i class="fas fa-star star font-size25"></i>
+                </div>
+                <div style="display: flex;">
+                    <span class="font-size25 ml-15">
+                        ({{totalStar}}
+                    </span>
+                    <span>&nbsp;/ 5</span>
+                    <span class="font-size25">
+                        )
+                    </span>
+                    <span class="ml-15">({{ratings.length}} đánh giá)</span>
+                </div>
+                {{/if}}
+                {{#unless ratings}}
+                <div style="border-bottom: 1px solid black; padding-bottom: 5px;">Chưa có đánh giá nào</div>
+                {{/unless}}
+            </div>
+            <div class="div-body-evaluate flex row">
+                {{#each ratings}}
+                <div class="col-lg-6">
+                    <div class="card-evaluate">
+                        <div class="flex" style="position: relative;">
+                            <img class="avatar" width="85" height="85" src="/{{this.chuSachId.avatar}}" alt="" />
+                            <div>
+                                <p>{{this.chuSachId.firstname}} {{this.chuSachId.lastname}}{{#if
+                                    (equalHelper this.chuSachId.trangThaiXacMinh 'Thành công')}}
+                                    <i class="fas fa-check-circle check-icon"></i>
+                                    {{/if}}
+                                </p>
+
+                                <div>
+                                    {{#if (isEqualTo this.star 1)}}
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    {{/if}}
+                                    {{#if (isEqualTo this.star 2)}}
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    {{/if}}
+                                    {{#if (isEqualTo this.star 3)}}
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    <i class="far fa-star star"></i>
+                                    {{/if}}
+                                    {{#if (isEqualTo this.star 4)}}
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+
+                                    <i class="far fa-star star"></i>
+                                    {{/if}}
+                                    {{#if (isEqualTo this.star 5)}}
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    <i class="fas fa-star star"></i>
+                                    {{/if}}
+                                </div>
+                            </div>
+
+                            <div class="info-avatar text-center">
+                                Chủ sách
+                            </div>
+                        </div>
+
+                        <div class="mt-10" style="height: 110px;">
+                            <svg width="10" height="9" viewBox="0 0 10 9" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M9.34 0.723999V2.092C8.62 2.212 8.116 2.464 7.828 2.848C7.54 3.232 7.396 3.916 7.396 4.9H9.232V8.32H5.704V5.44C5.704 3.952 5.98 2.8 6.532 1.984C7.084 1.144 8.02 0.723999 9.34 0.723999ZM4.156 0.723999V2.092C3.436 2.212 2.932 2.464 2.644 2.848C2.356 3.232 2.212 3.916 2.212 4.9H4.048V8.32H0.52V5.44C0.52 3.952 0.796 2.8 1.348 1.984C1.9 1.144 2.836 0.723999 4.156 0.723999Z"
+                                    fill="#E9435E"></path>
+                            </svg>
+                            <div>
+                                &emsp;{{this.comment}}
+                            </div>
+                        </div>
+                        <div class="background-{{this.star}} flex p-15 mt-15">
+                            <img class="avatar" width="80" height="80" src="/{{this.nguoiMuonId.avatar}}" alt="" />
+                            <div>
+                                <p>Đánh giá bởi</p>
+                                <p>{{this.nguoiMuonId.firstname}} {{this.nguoiMuonId.lastname}}{{#if
+                                    (equalHelper this.nguoiMuonId.trangThaiXacMinh 'Thành công')}}
+                                    <i class="fas fa-check-circle check-icon"></i>
+                                    {{/if}}
+                                </p>
+                                <p>{{formatDate this.createdAt}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+
+</div>

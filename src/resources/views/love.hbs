@@ -1,0 +1,50 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Sách yêu thích</li>
+        </ol>
+    </div>
+    {{#unless books.length}}
+    <div style="margin-top: 30px; justify-content: center; display: flex;">
+        <div style="width: 500px"><img src="/img/cart-empty.png" alt="" />
+            <h3 style="font-weight: 450; text-align: center; margin: 30px 0 70px 0;">BẠN CHƯA CÓ SÁCH YÊU THÍCH NÀO</h3>
+        </div>
+    </div>
+    {{/unless}}
+    <div class="body-page">
+        <div class="row">
+            {{#if books.length}}
+            {{#each books}}
+
+            <div class="col-sm-4 col-6 col-lg-2 col-md-3 box-book">
+                <form action="/love-delete-item" method="POST">
+                    <div>
+                        <button class="btn-remove-love" type="submit"><span><i class="fas fa-times-circle"
+                                    title="Xóa khỏi mục yêu thích"></i></span></button>
+                    </div>
+                    <input type="hidden" name="bookId" value="{{this.bookId._id}}" />
+                </form>
+                <div class="card card-book">
+                    <a href="/{{this.bookId.slugCategoryBook}}/{{this.bookId.slug}}">
+                        <img class="card-img-top img-book" src="/{{this.bookId.img}}" alt="{{this.bookId.name}}" />
+                    </a>
+
+                    <div class="book-info">
+                        <div class="card-title-book">
+                            <a href="/{{this.bookId.slugCategoryBook}}/{{this.bookId.slug}}"
+                                title="{{this.bookId.name}}" style="font-weight: 500;">
+                                {{this.bookId.name}}
+                            </a>
+                            <div>Tác giả:
+                                {{this.bookId.author}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {{/each}}
+            {{/if}}
+        </div>
+    </div>
+</div>

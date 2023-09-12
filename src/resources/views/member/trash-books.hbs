@@ -1,0 +1,105 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="/member/stored/book">Quản lý sách</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thùng rác</li>
+        </ol>
+    </div>
+    <div class="body-page">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">STT</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Loại sản phẩm</th>
+                    <th scope="col" colspan="">Thời gian xóa</th>
+                    <th scope="col">Thao tác</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each books}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.book_type}}</td>
+                    <td>{{formatDateTime this.deletedAt}}</td>
+                    <td>
+                        <a href="" class="btn btn-success" data-id="{{this._id}}">Khôi
+                            phục</a>
+                        <a href="" class="btn btn-remove " data-toggle="modal" data-id="{{this._id}}"
+                            data-target="#delete-book-modal">Xóa vĩnh viễn</a>
+                    </td>
+                </tr>
+
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Thùng rác trống
+                        <a style="color: rgb(28, 158, 11);" href="/member/stored/book">Danh sách sản phẩm</a>
+                    </td>
+                </tr>
+
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{{!-- confirm delete book --}}
+<div id="delete-book-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xóa sản phẩm?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Hành động này không thể khôi phục. Bạc chắc chắn muốn xóa sản phẩm này</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+
+                <button id="btn-delete-book" type="button" class="btn btn-danger">Xóa bỏ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form name="delete-book-form" method="POST"></form>
+<form name="restore-book-form" method="POST"></form>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var bookId;
+        var deleteForm = document.forms['delete-book-form']
+        var restoreForm = document.forms['restore-book-form']
+        var btnDeletebook = document.getElementById('btn-delete-book')
+        var restoreBtn = $('.btn-success')
+
+        // When dialog confirm clicked
+        $('#delete-book-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            bookId = button.data('id')
+        })
+
+        btnDeletebook.onclick = function () {
+            deleteForm.action = '/member/book/' + bookId + '/force?_method=DELETE'
+            deleteForm.submit()
+        }
+
+        restoreBtn.click(function (e) {
+            e.preventDefault() // bỏ hành vi mặc định cảu thẻ html
+
+            var bookId = $(this).data('id')
+            restoreForm.action = '/member/book/' + bookId + '/restore?_method=PATCH'
+            restoreForm.submit()
+        })
+    })
+
+</script>

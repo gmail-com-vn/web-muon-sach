@@ -1,0 +1,103 @@
+<div class="body">
+    <div class="content-page">
+        <ol class="nav-page flex">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{categoryBook}}</li>
+        </ol>
+    </div>
+    <div class="body-page">
+        <div class="row">
+            {{#each books}}
+            <div class="col-sm-4 col-6 col-lg-2 col-md-3 box-book">
+                <div class="card card-book">
+                    <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}">
+                        <img class="card-img-top img-book" src="/{{this.img}}" alt="{{this.name}}" />
+                    </a>
+
+                    <div class="book-info">
+                        <div class="card-title-book">
+                            <a href="/book/{{this.categoryId.slugCategoryBook}}/{{this.slug}}" title="{{this.name}}"
+                                style="font-weight: 500;">
+                                {{this.name}}
+                            </a>
+                        </div>
+                        <div class="flex item-center">
+                            <div class="col-lg-5">
+                                <form action="/sach-yeu-thich" method="POST">
+                                    <button class="btn btn-love" type="submit" title="Thêm vào sách yêu thích">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                    <input type="hidden" name="bookId" value="{{this._id}}" />
+                                </form>
+                            </div>
+                            <div class="div-borrow-book col-lg-7">
+                                <button class="btn-borrow-book" data-toggle="modal"
+                                    data-target="#book-modal-{{this._id}}">
+                                    <i class="far fa-paper-plane"></i>
+                                    Mượn sách
+                                </button>
+
+                                <div id="book-modal-{{this._id}}" class="modal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Gửi yêu cầu mượn sách tới
+                                                    <span
+                                                        style="font-size: 1.25rem; color: #1c9e0b;">{{this.userId.firstname}}
+                                                        {{this.userId.lastname}}</span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="/member/yeu-cau-muon-sach" method="POST">
+                                                <div class="modal-body">
+                                                    <div class="flex">
+                                                        <div class="col-lg-4">
+                                                            <img width="100%" src="/{{this.img}}" alt="" />
+                                                        </div>
+                                                        <div class="col-lg-8" style="margin: auto;">
+                                                            <p>Tên sách:
+                                                                <span
+                                                                    style="font-size: 17px; font-weight: 500;">{{this.name}}</span>
+                                                            </p>
+                                                            <p>Tác giả: {{this.author}}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="col-form-label">Tin
+                                                            nhắn:</label>
+                                                        <textarea class="form-control" name="message" id="message-text"
+                                                            required></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="recipient-name" class="col-form-label">Thời gian dự
+                                                            định trả sách (Ngày)</label>
+                                                        <input type="number" name="thoiGianTra" class="form-control"
+                                                            id="recipient-name" required />
+                                                    </div>
+                                                    <input type="hidden" name="bookId" value="{{this._id}}" />
+                                                    <input type="hidden" name="chuSachId" value="{{this.userId._id}}" />
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Hủy</button>
+                                                    <button id="btn-send-request" type="submit"
+                                                        class="btn btn-success">Gửi Yêu cầu</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
